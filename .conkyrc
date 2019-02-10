@@ -1,10 +1,11 @@
 ##### Basic Config ##### 
-
 conky.config = {
-    alignment =  'top_left',
-    maximum_width = 300,
+    alignment =  'middle_left',
+    maximum_width = 320,
     border_width = 2,
     font = 'Terminus:size=8',
+    max_text_width = 0,
+    default_color = 'white',
     gap_x = 5,
     gap_y = 5,
     own_window = true,
@@ -16,6 +17,7 @@ conky.config = {
     use_xft = true,
     xftalpha = 0,
     update_interval = 1.0,
+	update_interval_on_battery = 2.0,
     total_run_times = 0,
     double_buffer = true,
     draw_shades = true,
@@ -27,68 +29,75 @@ conky.config = {
     override_utf8_locale = true,
     use_spacer =  'right'
 }
- 
 conky.text = [[
-${font Roboto:size=10}${color grey}${nodename} ${machine} ${sysname} ${kernel} ${uptime} $loadavg{alignc}${font}${color}
+##### ${font Roboto:size=10}${color grey}${nodename}     ${machine}     ${sysname}     ${kernel}${font}${color} #####
 ##### Battery #####
-${font Roboto:size=10}${color grey}Battery: ${battery_percent BAT0}% ${color}
-${offset 20}${color white}${battery_bar 5 BAT0} ${color}
+${font Roboto:size=10}${color grey}Battery:${color} ${color white}${battery_percent BAT0}%${color}  ${color grey}Up:${color} ${color white}${uptime}${color}  ${color grey}Load:${color} ${color white}${loadavg}${font}${color}
+###### ${color white}${battery_bar 5 BAT0} ${color} ######
 ##### CPU #####
 ${font Roboto:size=10}${color grey}CPU ${hr 2} ${alignr}${font}${color}
-${offset 20}Average ${cpubar cpu0 10}%
-${offset 20}Core 1 (${cpu cpu1}%) ${alignr} Core 2 (${cpu cpu2}%)
-${offset 20}${cpugraph cpu1 15,100}$alignr${cpugraph cpu2 15,100}
-${offset 20}Core 3 (${cpu cpu3}%) ${alignr} Core 4 (${cpu cpu4}%)
-${offset 20}${cpugraph cpu3 15,100}$alignr${cpugraph cpu4 15,100}
-${offset 20}Core 1 ${top name 1}$alignr${top cpu 1}%
-${offset 20}Core 2 ${top name 2}$alignr${top cpu 2}%
-${offset 20}Core 3 ${top name 3}$alignr${top cpu 3}%
-${offset 20}Core 4 ${top name 4}$alignr${top cpu 4}%
+${offset 10}${color white}Temp: ${alignr}${hwmon 0 temp 1}°C | Core 0: ${hwmon 1 temp 1}°C | Core 1: ${hwmon 2 temp 1}°C${color}
+${offset 10}Total: ${cpu cpu0}% ${cpubar cpu0 3}
+${offset 10}Core 1 ${cpu cpu1}% ${alignr} Core 2 ${cpu cpu2}%
+${offset 10}${cpugraph cpu1 10,100}$alignr${cpugraph cpu2 10,100}
+${offset 10}Core 3 ${cpu cpu3}% ${alignr} Core 4 ${cpu cpu4}%
+${offset 10}${cpugraph cpu3 10,100}$alignr${cpugraph cpu4 10,100}
+${offset 10}Core 1 ${top name 1}$alignr${top cpu 1}%
+${offset 10}Core 2 ${top name 2}$alignr${top cpu 2}%
+${offset 10}Core 3 ${top name 3}$alignr${top cpu 3}%
+${offset 10}Core 4 ${top name 4}$alignr${top cpu 4}%
 ##### Memory #####
-${font Roboto:size=10}${color grey}Memory ${hr 2} ${alignr}${font}${color}
-${offset 20}Ram: $mem / $memmax $alignr $memperc%  
-${offset 20}${membar 5}
-${offset 20}Swap: ${swapperc}%
-${offset 20}${swapbar 5}
-${offset 20}${top_mem name 1}$alignr${top_mem mem 1}%
-${offset 20}${top_mem name 2}$alignr${top_mem mem 2}%
-${offset 20}${top_mem name 3}$alignr${top_mem mem 3}%
-${offset 20}${top_mem name 4}$alignr${top_mem mem 4}%
-${offset 20}${top_mem name 5}$alignr${top_mem mem 5}%
+${font Roboto:size=10}${color grey}Memory ${hr 2}${font}${color}
+${offset 10}Ram: ${mem} / ${memmax}     ${alignr}${memperc}%
+${offset 10}${membar 3}
+${offset 10}Swap: ${alignr}${swapperc}%
+${offset 10}${swapbar 3}
+${offset 10}${top_mem name 1}$alignr${top_mem mem 1}%
+${offset 10}${top_mem name 2}$alignr${top_mem mem 2}%
+${offset 10}${top_mem name 3}$alignr${top_mem mem 3}%
+${offset 10}${top_mem name 4}$alignr${top_mem mem 4}%
+${offset 10}${top_mem name 5}$alignr${top_mem mem 5}%
 ##### Storage #####
 ${font Roboto:size=10}${color grey}Storage ${hr 2}${alignr}${font}${color}
-${offset 20}Home ${fs_used /} / ${fs_size /} $alignr ${fs_used_perc /}%
-${offset 20}${fs_bar 5 /}
-${offset 20}NTFS ${fs_used /media/brett/OS} / ${fs_size /media/brett/OS} $alignr ${fs_used_perc /media/brett/OS}%
-${offset 20}${fs_bar 5 /media/brett/OS}%
-${if_existing /media/brett/A2AF-4359}${offset 20}SD ${fs_used /media/brett/A2AF-4359} / ${fs_size /media/brett/A2AF-4359} $alignr} ${fs_used_perc /media/brett/A2AF-4359}%
-${offset 20}${fs_bar 5 /media/brett/A2AF-4359}${else}\
-${offset 20}No SD
-${offset 20}${hr 1}${endif}
-${if_existing /media/brett/A}${offset 20}USB1 ${fs_used /media/brett/A} / ${fs_size /media/brett/A} $alignr} ${fs_used_perc /media/brett/A}%
-${offset 20}${fs_bar 5 /media/brett/A}${else}\
-${if_existing /media/brett/B}${offset 20}USB2 ${fs_used /media/brett/B} / ${fs_size /media/brett/B} $alignr} ${fs_used_perc /media/brett/B}%
-${offset 20}${fs_bar 5 /media/brett/B}${else}\
-${if_existing /media/brett/C}${offset 20}USB3 ${fs_used /media/brett/C} / ${fs_size /media/brett/C} $alignr} ${fs_used_perc /media/brett/C}%
-${offset 20}${fs_bar 5 /media/brett/C}${else}\
-${offset 20}No USB
-${offset 20}${hr 1}${endif}${endif}${endif}
-##### Temp ##### 
-${font Roboto:size=10}${color grey}Temp ${hr 2}${alignr}${font}${color}
-${offset 20}${color white}${color}CPU ${alignr}${hwmon 0 temp 1}°C
-${offset 20}${color white}${color}Core 0${alignr}${hwmon 1 temp 1}°C
-${offset 20}${color white}${color}Core 1${alignr}${hwmon 2 temp 1}°C
+${offset 10}Home ${fs_used /} / ${fs_size /} ${alignr} ${fs_used_perc /}%
+${offset 10}${fs_bar 3 /}
+${if_mounted /media/brett/OS}${offset 10}NTFS ${fs_used /media/brett/OS} / ${fs_size /media/brett/OS} $alignr ${fs_used_perc /media/brett/OS}
+${offset 10}${fs_bar 3 /media/brett/OS}${else}\
+${offset 10}NTFS Not Mounted
+${offset 10}${hr 1}${endif}
+${if_mounted /media/brett/A2AF-4359}${offset 10}SD ${fs_used /media/brett/A2AF-4359} / ${fs_size /media/brett/A2AF-4359} ${alignr} ${fs_used_perc /media/brett/A2AF-4359}%
+${offset 10}${fs_bar 3 /media/brett/A2AF-4359}${else}\
+${offset 10}No SD
+${offset 10}${hr 1}${endif}
+${if_mounted /media/brett/A}${offset 10}USB1 ${fs_used /media/brett/A} / ${fs_size /media/brett/A} $alignr} ${fs_used_perc /media/brett/A}%
+${offset 10}${fs_bar 3 /media/brett/A}${else}\
+${if_mounted /media/brett/B}${offset 10}USB2 ${fs_used /media/brett/B} / ${fs_size /media/brett/B} $alignr} ${fs_used_perc /media/brett/B}%
+${offset 10}${fs_bar 3 /media/brett/B}${else}\
+${if_mounted /media/brett/C}${offset 10}USB3 ${fs_used /media/brett/C} / ${fs_size /media/brett/C} $alignr} ${fs_used_perc /media/brett/C}%
+${offset 10}${fs_bar 3 /media/brett/C}${else}\
+${offset 10}No USB
+${offset 10}${hr 1}${endif}${endif}${endif}
 ##### Network #####
 ${font Roboto:size=10}${color grey}Network ${hr 2}${alignr}${font}${color}
-${offset 20}Network: ${wireless_essid wlp9s0}
-${offset 20}${color white}${color}IP: ${addrs wlp9s0}  ${alignr}MAC: ${wireless_ap wlp9s0}
-${offset 20}Channel: ${wireless_channel wlp9s0} ${alignr}Freq: ${wireless_freq wlp9s0}
-## ${offset 20}${color white}$color Ext IP: ${exec sh ip.sh} ##
-${offset 20}${color grey}${if_up wlp9s0}wlp9s0 (${addr wlp9s0}) ${hr 2}$color
-${offset 20}${color white}${color} ${downspeedf wlp9s0}Kbps${alignr}${color white}$color ${upspeedf wlp9s0}Kbps
-${offset 20}${downspeedgraph wlp9s0 15,100} ${alignr}${upspeedgraph wlp9s0 15,100}$color${endif}
-${offset 20}${color grey}${if_up enp5s0}enp5s0 (${addr enp5s0}) ${hr 2}$color
-${offset 20}${color white}${color} ${downspeedf enp0s25}Kbps${alignr}${color white}$color ${upspeedf enp0s25}Kbps
-${offset 20}${downspeedgraph enp0s25 15,100} ${alignr}${upspeedgraph enp0s25 15,100}$color${endif}
+${offset 10}Network: ${wireless_essid wlp9s0} ${alignr}External IP: ${execi 600 curl https://ipinfo.io/ip}
+${offset 10}${color white}${color}IP: ${addrs wlp9s0} ${alignr}MAC: ${wireless_ap wlp9s0}
+${offset 10}Channel: ${wireless_channel wlp9s0} ${alignr}Freq: ${wireless_freq wlp9s0}
+${offset 10}${color white}DL: ${downspeedf wlp9s0}Kbps${alignr}UL: ${upspeedf wlp9s0}Kbps${color}
+${offset 10}${downspeedgraph wlp9s0 10,120} ${alignr}${upspeedgraph wlp9s0 10,120}${color}
+## ${if_up enp5s0}${offset 20}${color white}${color} ${downspeedf enp0s25}Kbps${alignr}${color white}$color ${upspeedf enp0s25}Kbps ##
+## ${offset 20}${downspeedgraph enp0s25 10,100} ${alignr}${upspeedgraph enp0s25 10,100}${color}##
+##### Connections #####
+${offset 10}${alignc}** Total Connections: ${tcp_portmon 1 65535 count} **
+${offset 10}Inbound Connections: ${alignr} Local Service/Port${color}
+${offset 10}${tcp_portmon 1 65535 rhost 0} ${alignr} ${tcp_portmon 1 65535 lservice 0}
+${offset 10}${tcp_portmon 1 65535 rhost 1} ${alignr} ${tcp_portmon 1 65535 lservice 1}
+${offset 10}${tcp_portmon 1 65535 rhost 2} ${alignr} ${tcp_portmon 1 65535 lservice 2}
+${offset 10}${tcp_portmon 1 65535 rhost 3} ${alignr} ${tcp_portmon 1 65535 lservice 3}
+${offset 10}${tcp_portmon 1 65535 rhost 4} ${alignr} ${tcp_portmon 1 65535 lservice 4}
+${offset 10}Outbound Connections: ${alignr} Remote Service/Port${color}
+${offset 10}${tcp_portmon 1 65535 lhost 0} ${alignr} ${tcp_portmon 1 65535 lservice 0}
+${offset 10}${tcp_portmon 1 65535 lhost 1} ${alignr} ${tcp_portmon 1 65535 rservice 1}
+${offset 10}${tcp_portmon 1 65535 lhost 2} ${alignr} ${tcp_portmon 1 65535 rservice 2}
+${offset 10}${tcp_portmon 1 65535 lhost 3} ${alignr} ${tcp_portmon 1 65535 rservice 3}
+${offset 10}${tcp_portmon 1 65535 lhost 4} ${alignr} ${tcp_portmon 1 65535 rservice 4}
 ]]
-
